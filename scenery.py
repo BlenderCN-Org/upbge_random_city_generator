@@ -1,6 +1,5 @@
 import bge, json
 from bge.logic import globalDict
-from bge.render import setMipmapping
 from random import choice, random
 from pprint import pprint
 from ast import literal_eval as litev
