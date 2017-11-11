@@ -9,6 +9,9 @@ from ast import literal_eval as litev
 if not 'map' in globalDict.keys():
 	globalDict['map'] = {}
 	
+if not 'player_active' in globalDict.keys():
+	globalDict['player_active'] = False
+	
 def gen_coords(cont):
 	""" Generates the coordinates of the active camera. Helper for the scenery dynamic loading. """
 	
@@ -35,6 +38,8 @@ def gen_coords(cont):
 		else:
 			print(own['current_coords'], 'not in map')
 	
+	pass
+
 def gen_city(cont):
 	""" Generates a random city, using a pre made set of rules. """
 	
@@ -55,6 +60,10 @@ def gen_city(cont):
 		setMipmapping(False)
 		
 		scene.active_camera.worldPosition = (max_x/2, -max_y/2, 200)
+		
+		if not globalDict['player_active']:
+			character = scene.addObject('character')
+			character.groupMembers['char_collision'].worldPosition = (max_x/2, -max_y/2, 1)
 		
 		### Generates the given number of streets ###
 		for x in range(0, max_x, 100):
@@ -139,7 +148,7 @@ def gen_city(cont):
 			added = scene.addObject(obj['type'] + '_group')
 			
 			for i in added.groupMembers:
-				i.setParent(added)
+				i.setParent(added, 0, 0)
 			
 			added.worldPosition = obj['position']
 			
@@ -157,7 +166,7 @@ def spawn_building(cont):
 	
 	# Properties
 	buildings = ('building_01', 'building_02', 'building_03', 'building_04', 'building_05', 'house_01', 'house_02', 'house_03', 'house_04', 'house_05', 'house_06', 'house_07', 'house_08', 'house_09', 'house_10', 'house_11', 'house_12', 'house_13')
-	fences = ('fence_01', 'fence_02', 'fence_03', 'fence_04')
+	fences = ('fence_01', 'fence_02', 'fence_03', 'fence_04', 'fence_05', 'fence_06')
 	
 	# Objects
 	street = own.groupObject.groupMembers[own.groupObject.name.replace('_group', '')]
@@ -172,6 +181,7 @@ def spawn_building(cont):
 		
 		# Set building to random color
 		building.color[0] = random()
+		fence.color[0] = random()
 		
 		# Warning message
 		print('Added', building.name, 'at', tuple(building.worldPosition), 'with hue', building.color[0].__round__(2))
