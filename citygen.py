@@ -8,7 +8,33 @@ from ast import literal_eval as litev
 # Initialize globalDict
 if not 'map' in globalDict.keys():
 	globalDict['map'] = {}
-
+	
+def gen_coords(cont):
+	""" Generates the coordinates of the active camera. Helper for the scenery dynamic loading. """
+	
+	own = cont.owner
+	scene = own.scene
+	
+	# Sensors
+	sensor = cont.sensors[0].positive
+	
+	# Properties
+	camera = scene.active_camera
+	
+	#### INITIALIZE ####
+	if sensor:
+		
+		cam_pos = camera.worldPosition
+		coords = ( int((cam_pos.x//100*100)), int((cam_pos.y//100*100)), 0 )
+		
+		own['current_coords'] = str(coords)
+		
+		if own['current_coords'] in globalDict['map'].keys():
+			print('Current type is', globalDict['map'][own['current_coords']]['type'])
+			
+		else:
+			print(own['current_coords'], 'not in map')
+	
 def gen_city(cont):
 	""" Generates a random city, using a pre made set of rules. """
 	
